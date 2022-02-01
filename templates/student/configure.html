@@ -1,0 +1,119 @@
+{% extends "public/classBase.html" %}
+
+{% block title %}Configure Class{% endblock %}
+
+{% block subpage %}
+<div class="class-subpage">
+    <div class="title">
+        <h4>Configure Class</h4>
+    </div>
+    <div class="block-wrapper">
+        <h1>Blocker</h1>
+        <div class="block-container">
+            <div class="block-card">
+                <h2>Website</h2>
+                <p>
+                    This will blocked all selected website when students start their tracker.
+                </p>
+                <button class="btn btn-blue" id="webConfig">See Lists</button>
+            </div>
+            <div class="block-card">
+                <h2>Application</h2>
+                <p>
+                    This will automatically terminate or exit selected applications when the tracker in on.
+                </p>
+                <button class="btn btn-blue" id="appConfig">See Lists</button>
+            </div>
+        </div>
+    </div>
+    <div class="productive-wrapper">
+        <h1>Productive Websites and Applicaitons</h1>
+        <div class="productive-container">
+            <div class="add-productive">
+                <h2>Productive</h2>
+                <p>
+                    This will help you determine whether your student are using the right apps.
+                    The feature of <strong>Student Card Behavior</strong> will help you to detect student who are
+                    using the productive and not productive application. Website and Application not added will
+                    be automatically consider as a not productive application.
+                </p>
+            </div>
+            <div class="list-card">
+                <div>
+                    <h4>List of Approved Apps</h4>
+                    <ul>
+                        {% for productiveAppsData in productiveAppsData %}
+                        <li>{{ productiveAppsData['appName'] }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="web-popup" class="overlay hide">
+        <div class="class-container config">
+            <div id="btnCloseWeb" class="popup-close">&times;</div>
+            <h2>Website Blocked</h2>
+            <ul>
+                {% for webBlockData in webBlockData %}
+                    {% if webBlockData.blockStatus == 'enable' %}
+                    <li>{{ webBlockData.blockName }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div id="app-popup" class="overlay hide">
+        <div class="class-container config">
+            <div id="btnCloseApp" class="popup-close">&times;</div>
+            <h2>Application Blocker</h2>
+            <ul>
+                {% for appBlockData in appBlockData %}
+                    {% if appBlockData.blockStatus == 'enable' %}
+                    <li>{{ appBlockData.blockName }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock subpage %}
+
+{% block script %}
+<script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var classHome = document.querySelector('#classHome');
+        var classTracker = document.querySelector('#classTracker');
+        var classPeople = document.querySelector('#classPeople');
+        var classConfig = document.querySelector('#classConfig');
+
+        classHome.classList.remove('link-active');
+        classTracker.classList.remove('link-active');
+        classPeople.classList.remove('link-active');
+        classConfig.classList.add('link-active');
+    });
+    var btnWebConfig = document.querySelector('#webConfig');
+    var webPopup = document.querySelector('#web-popup');
+    var btnCloseWeb = document.querySelector('#btnCloseWeb')
+
+    btnWebConfig.addEventListener('click', () => {
+        webPopup.classList.add('show');
+    })
+    btnCloseWeb.addEventListener('click', () => {
+        webPopup.classList.remove('show');
+    })
+
+    var btnAppConfig = document.querySelector('#appConfig');
+    var appPopup = document.querySelector('#app-popup');
+    var btnCloseApp = document.querySelector('#btnCloseApp')
+
+    btnAppConfig.addEventListener('click', () => {
+        appPopup.classList.add('show');
+    })
+    btnCloseApp.addEventListener('click', () => {
+        appPopup.classList.remove('show');
+    })
+</script>
+{% endblock %}

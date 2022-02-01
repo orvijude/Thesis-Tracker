@@ -1,0 +1,81 @@
+{% extends "admin/base.html" %}
+
+{% block title %} Admin - Dashboard {% endblock %}
+
+{% block content %}
+<div class="admin-content">
+    <div class="title">
+        <h2>Dashboard</h2>
+    </div>
+    <div class="dashboard-flex">
+        <div class="dashboard-card">
+            <h2>{{ student.student }}</h2>
+            <p>Students</p>
+        </div>
+        <div class="dashboard-card">
+            <h2>{{ instructor.instructor}}</h2>
+            <p>Instructors</p>
+        </div>
+        <div class="dashboard-card">
+            <h2>{{ noofclass.class }}</h2>
+            <p>Classes</p>
+        </div>
+        <div class="dashboard-card">
+            <h2>{{ activeStudent.active }}</h2>
+            <p>Active Students</p>
+        </div>
+    </div>
+    <div class="recent-flex">
+        <div class="recent-container">
+            <p>Recent users created</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fullname</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recentUsers in recentUsers %}
+                    <tr>
+                        <td>{{ recentUsers.userID }}</td>
+                        <td>{{ recentUsers.fullname }}</td>
+                        <td class="sm-grey">{{ recentUsers.datecreated }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="recent-container">
+            <p>Recent class created</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Class Name</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recentClass in recentClass %}
+                    <tr>
+                        <td>{{ recentClass.classID }}</td>
+                        <td>{{ recentClass.className }}</td>
+                        <td class="sm-grey">{{ recentClass.datecreated }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block script %}
+<script>
+
+</script>
+{% endblock %}

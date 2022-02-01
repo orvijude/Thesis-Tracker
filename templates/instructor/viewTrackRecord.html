@@ -1,0 +1,248 @@
+{% extends "public/classBase.html" %}
+
+{% block title %} {{ studentData.fullname }} - Track Record {% endblock %}
+
+{% block subpage %}
+<div class="class-subpage">
+    <div class="title">
+        <h4>Student Track Record</h4>
+        <div class="btn btn-blue" id="selectDate"></div>
+    </div>
+    {% if studentData['isActive'] == '1' %}
+        {% if currentAct['actName'] in prodApps %}
+        <div class="student-info-wrapper prod-app">
+            <div class="img"></div>
+            <div class="info">
+                <h4>{{ studentData['fullname'] }}</h4>
+                <p>{{ currentAct['activityName'] }}</p>
+            </div>
+        </div>
+        {% else %}
+        <div class="student-info-wrapper not-prod-app">
+            <div class="img"></div>
+            <div class="info">
+                <h4>{{ studentData['fullname'] }}</h4>
+                <p>{{ currentAct['activityName'] }}</p>
+            </div>
+        </div>
+        {% endif %}
+    {% elif studentData['isActive'] == '3' %}
+        <div class="student-info-wrapper">
+            <div class="img"></div>
+            <div class="info">
+                <h4>{{ studentData['fullname'] }}</h4>
+                <p>Idled</p>
+            </div>
+        </div>
+    {% else %}
+        <div class="student-info-wrapper">
+            <div class="img"></div>
+            <div class="info">
+                <h4>{{ studentData['fullname'] }}</h4>
+                <p>Offline</p>
+            </div>
+        </div>
+    {% endif %}
+    <div class="track">
+        <div class="track-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Application Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for logData in logData %}
+                        <tr>
+                            <td>{{ logData['curDate'] }} {{ logData['curTime'] }}</td>
+                            <td>{{ logData['activityName'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="track-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Application Name</th>
+                        <th>hrs</th>
+                        <th>mins</th>
+                        <th>secs</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entryData in entryData %}
+                        <tr>
+                            <td> {{ entryData[0] }}</td>
+                            <td> {{ entryData[1] }}</td>
+                            <td> {{ entryData[2] }}</td>
+                            <td> {{ entryData[3] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="track-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Browser Title</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for titleData in titleData %}
+                        <tr>
+                            <td>{{ titleData['curTime'] }}</td>
+                            <td>{{ titleData['title'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="track-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Running Apps</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for runningAppsData in runningAppsData %}
+                        <tr>
+                            <td class="dropdown">
+                                {{ runningAppsData }}
+                                    <div class="dropbtn" id="{{ runningAppsData }}"> <img src=" {{ url_for('static', filename='icons/kebab.svg') }} " alt="kebab icon"> </div>
+                                    <div class="dropdown-content {{ runningAppsData }}" id="content-{{ runningAppsData }}">
+                                        <a href="/classid={{classData.classID}}/tracker/view={{studentData.userID}}/add/{{runningAppsData}}">Block app</a>
+                                        <a href="/classid={{classData.classID}}/tracker/view={{studentData.userID}}/add/prod/{{runningAppsData}}">Add to Productive App</a>
+                                    </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="track-container-full">
+            <div class="prod-time">
+                <p> <span>Total Time:</span> {{ totalTime[0] }}hrs {{ totalTime[1] }}mins {{ totalTime[2] }}secs</p>
+                <p> <span>Productive:</span> {{timeProd[0][1]}} hrs {{timeProd[0][2]}} mins  {{timeProd[0][3]}} secs ({{ timeProd[0][0] }}%)</p>
+                <p> <span> Not Productive:</span> {{timeProd[1][1]}} hrs {{timeProd[1][2]}} mins  {{timeProd[1][3]}} secs ({{ timeProd[1][0] }}%)</p>
+            </div>
+            <div class="flex-form">
+                <h3>Productive</h3>
+                <div style="position: relative; height: 40px; background-color:#33EDAC; width:{{timeProd[0][0]}}%;" id="productiveBar">
+                    <p id="productiveTime">{{timeProd[0][1]}} hrs {{timeProd[0][2]}} mins  {{timeProd[0][3]}} secs</p>
+                </div>
+            </div>
+            <div class="flex-form">
+                <h3>Not Productive</h3>
+                <div style="position: relative; height: 40px; background-color:#FD260E; width:{{timeProd[1][0]}}%;" id="notProductiveBar">
+                    <p id="notProductiveTime">{{timeProd[1][1]}} hrs {{timeProd[1][2]}} mins  {{timeProd[1][3]}} secs</p>
+                </div>
+            </div>
+        </div>
+        <div class="track-container-full key">
+            <h3>Keystrokes</h3>
+            <div class="flex-form">
+                <div class="key-card">
+                    <h2> {{ keyData[0] }} </h2>
+                    <span>Alt Tab</span>
+                </div>
+                <div class="key-card">
+                    <h2> {{ keyData[1] }} </h2>
+                    <span>Copy</span>
+                </div>
+                <div class="key-card">
+                    <h2> {{ keyData[2] }} </h2>
+                    <span>Paste</span>
+                </div>
+                <div class="key-card">
+                    <h2> {{ keyData[3] }} </h2>
+                    <span>Find</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="selectDatePopup" class="overlay hide">
+    <div class="class-container date">
+        <div id="btnClosePopup" class="popup-close">&times;</div>
+        <h2>Select Date</h2>
+        <ul>
+        {% for dates in dates %}
+            <li><a href="/classid={{classData.classID}}/tracker/view={{studentData['userID']}}/date={{dates['curDate']}}">{{ dates['curDate'] }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+{% endblock subpage %}
+
+
+{% block script %} 
+<script>
+    let currentDate = new Date();
+    let cDay = currentDate.getDate();
+    let cMonth = currentDate.getMonth() + 1;
+    let cYear = currentDate.getFullYear();
+    document.getElementById("selectDate").innerHTML =  cYear + "-" + cMonth + "-" + cDay
+
+    var selectDate = document.querySelector('#selectDate');
+    var selectDatePopup = document.querySelector('#selectDatePopup');
+    var btnClosePopup = document.querySelector('#btnClosePopup');
+
+    selectDate.addEventListener('click', () => {
+        selectDatePopup.classList.add('show');
+    })
+    btnClosePopup.addEventListener('click', () => {
+        selectDatePopup.classList.remove('show');
+    })
+
+    document.querySelectorAll('.dropbtn').forEach(function(el){
+        
+        el.addEventListener('click', function() {
+            var x = document.getElementsByClassName(this.id)
+            document.querySelectorAll('.dropdown-content').forEach(function(a){ 
+                if (x[0].classList.contains(this.id)) {
+                    console.log('pass')
+                }
+            });
+            x[0].style.display = "block";
+        });
+    });
+
+    document.addEventListener("click", function(event) {
+	
+        if (event.target.closest(".dropbtn")) return;
+        dropcontent = document.getElementsByClassName('dropdown-content')
+
+        document.querySelectorAll('.dropdown-content').forEach(function(a){ 
+            a.style.display = "none";
+        });
+    });
+
+    $("#productiveBar").on( {
+        mouseenter: function() {
+            $("#productiveTime").css('display', 'block');
+        }, 
+        mouseleave: function() {
+            $("#productiveTime").css('display', 'none');
+        }
+    });
+    $("#notProductiveBar").on( {
+        mouseenter: function() {
+            $("#notProductiveTime").css('display', 'block');
+        }, 
+        mouseleave: function() {
+            $("#notProductiveTime").css('display', 'none');
+        }
+    });
+
+</script>
+{% endblock %}

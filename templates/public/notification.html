@@ -1,0 +1,22 @@
+{% extends "public/base.html" %}
+
+{% block title %}Notification{% endblock %}
+
+{% block content %}
+<div class="title">
+    <h1>Notification</h1>
+</div>
+
+<div class="notif-wrapper">
+    {% for notifData in notifData %}
+        <div class="notif-card">
+            <img src=" {{ url_for('static', filename='icons/class.svg') }} " alt="bell icon">
+            <div class="details">
+                <h4>{{ notifData.notifName }}</h4>
+                <p class="sm-grey">{{ notifData.tmstmp }}</p>
+                <p>{{ notifData.notiftext }}</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock content %}

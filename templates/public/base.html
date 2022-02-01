@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='scss/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-3.4.1.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+</head>
+<body class="loggedin tracker">
+    {% if userData.type == 'instructor' %}
+    <div id="iconHam" class="menu-button-res-white">
+        <img  src="{{ url_for('static', filename='icons/icon-hamburger.svg') }}" alt="navigation menu icon">
+        <span>Menu</span>
+    </div>
+    <nav class="menu-fixed menu-res-white res-blue" style="background-color:rgba(46, 67, 255, 0.30); box-shadow: none;">
+        <img id="iconClose" src="{{ url_for('static', filename='icons/icon-close-black.svg') }}" alt="close navigation menu icon">
+        <ul>
+            <li>
+                <a href="/profile/userID={{ userData.userID }}">
+                    <img src=" {{ url_for('static', filename='icons/user-blue.svg') }} " alt="user icon">
+                    <span>Profile</span>
+                </a>    
+            </li>
+            <li>
+                <a href="{{ url_for('class_view') }}">
+                    <img src=" {{ url_for('static', filename='icons/class-blue.svg') }} " alt="class icon">
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('notification') }}">
+                    <img src=" {{ url_for('static', filename='icons/bell-blue.svg') }} " alt="bell icon">
+                    <span>Notification</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('calendar') }}">
+                    <img src=" {{ url_for('static', filename='icons/calendar-blue.svg') }} " alt="bell icon">
+                    <span>Calendar</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('sign_out') }}">
+                    <img src=" {{ url_for('static', filename='icons/signout-blue.svg') }} " alt="bell icon">
+                    <span>Sign out</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    {% else %}
+    <div id="iconHam" class="menu-button-res-white">
+        <img  src="{{ url_for('static', filename='icons/icon-hamburger.svg') }}" alt="navigation menu icon">
+        <span>Menu</span>
+    </div>
+    <nav class="menu-fixed menu-res-white">
+        <img id="iconClose" src="{{ url_for('static', filename='icons/icon-close-black.svg') }}" alt="close navigation menu icon">
+        <ul>
+            <li>
+                <a href="/profile/userID={{ userData.userID }}">
+                    <img src=" {{ url_for('static', filename='icons/user.svg') }} " alt="user icon">
+                    <span>Profile</span> 
+                </a>   
+            </li>
+            <li>
+                <a href="{{ url_for('class_view') }}">
+                    <img src=" {{ url_for('static', filename='icons/class.svg') }} " alt="class icon">
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('notification') }}">
+                    <img src=" {{ url_for('static', filename='icons/bell.svg') }} " alt="bell icon">
+                    <span>Notification</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('calendar') }}">
+                    <img src=" {{ url_for('static', filename='icons/calendar.svg') }} " alt="bell icon">
+                    <span>Calendar</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('sign_out') }}">
+                    <img src=" {{ url_for('static', filename='icons/signout.svg') }} " alt="bell icon">
+                    <span>Sign out</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    {% endif %}
+    <div class="content">
+        {% block content %} {% endblock %}
+    </div>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <!-- Do something with the message -->
+                <div class="notification-popup {{category}}">
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% block script %} {% endblock %}
+    <script>
+        var iconHam = document.querySelector('#iconHam');
+        var iconClose = document.querySelector('#iconClose');
+        var resMenu = document.querySelector('.menu-res-white');
+
+        iconHam.addEventListener('click', () => {
+            resMenu.style.display = 'block'
+            iconHam.style.display = 'none'
+        })
+        iconClose.addEventListener('click', () => {
+            resMenu.style.display = 'none'
+            iconHam.style.display = 'block'
+        }) 
+    </script>
+    <div id="successAlert" role="alert" style="display:none;"></div>
+    <div id="errorAlert" role="alert" style="display:none;"></div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% extends "public/base.html" %}
+
+{% block title %}Calendar{% endblock %}
+
+{% block content %}
+<div class="title">
+    <h1>Calendar</h1>
+</div>
+
+<div id="calendar"></div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    let calendarEl = document.getElementById('calendar')
+    const dateString = new Date().toISOString().slice(0, 10);
+    let calendar = new FullCalendar.Calendar
+    (calendarEl, {
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: [
+            {% for classData in classData %}
+            {   
+                title : '{{classData.className}}',
+                startTime : '{{classData.classTimeStart}}',
+                endTime : '{{classData.classTimeEnd}}',
+                daysOfWeek : {{classData.classDay}},
+                color: '{{classData.classColor}}'
+            },
+            {% endfor %}
+        ],
+        allDay: false 
+    })
+
+    calendar.render();
+</script>
+{% endblock %}

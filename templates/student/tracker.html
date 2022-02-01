@@ -1,0 +1,145 @@
+{% extends "public/classBase.html" %}
+
+{% block title %} Tracker - {{ classData['className'] }} {% endblock %}
+
+{% block subpage %}
+<div class="class-subpage">
+    <div class="title">
+        <h4>Tracker</h4>
+        <div class="btn btn-grey-blue" id="configureTracker">Configure Tracker</div>
+    </div>
+    <div class="blue-container">
+        <h4>Waiting Tracker to start</h4>
+        <a href="/classid={{classData.classID}}/tracker/start" class="btn btn-blue">Start Tracker</a>
+    </div>
+</div>
+<div id="tracker-popup" class="overlay hide">
+    <div class="class-container config-track">
+        <div id="btnCloseTracker" class="popup-close">&times;</div>
+        <h2>Configure Tracker</h2>
+        <div class="track-config-container">
+            <h5>Blocker</h5>
+            <div class="checkbox-container nohover">
+                {% if classData.blocker == 'enable' %}
+                <label>
+                    <input type="checkbox" class="blocker" name="blockerEna" id="blockerEna" value="enable" checked disabled>
+                    <span>Enable</span>
+                </label>
+                {% else %}
+                <label>
+                    <input type="checkbox" class="blocker" name="blockerEna" id="blockerEna" value="enable" disabled>
+                    <span>Enable</span>
+                </label>
+                {% endif %}
+                {% if classData.blocker == 'disable' %}
+                <label>
+                    <input type="checkbox" class="blocker" name="blockerDis" id="blockerDis" value="disable" checked disabled>
+                    <span>Disable</span>
+                </label>
+                {% else %}
+                <label>
+                    <input type="checkbox" class="blocker" name="blockerDis" id="blockerDis" value="disable" disabled>
+                    <span>Disable</span>
+                </label>
+                {% endif %}
+            </div>
+        </div>
+        <div class="track-config-container">
+            <h5>Keyboard Shortcut</h5>
+            <div class="checkbox-container nohover">
+                {% if classData.keystrokes == 'enable' %}
+                <label>
+                    <input type="checkbox" class="kbLimit" name="kbLimitEna" id="kbLimitEna" value="enable" checked disabled>
+                    <span>Enable</span>
+                </label>
+                {% else %}
+                <label>
+                    <input type="checkbox" class="kbLimit" name="kbLimitEna" id="kbLimitEna" value="enable" disabled>
+                    <span>Enable</span>
+                </label>
+                {% endif %}
+                {% if classData.keystrokes == 'disable' %}
+                <label>
+                    <input type="checkbox" class="kbLimit" name="kbLimitDis" id="kbLimitDis" value="disable" checked disabled>
+                    <span>Disable</span>
+                </label>
+                {% else %}
+                <label>
+                    <input type="checkbox" class="kbLimit" name="kbLimitDis" id="kbLimitDis" value="disable" disabled>
+                    <span>Disable</span>
+                </label>
+                {% endif %}
+            </div>
+        </div>
+        <div class="track-config-container">
+            <h5>Idle</h5>
+            <div class="checkbox-container nohover">
+                {% if classData.idle == 'enable' %}
+                <label>
+                    <input type="checkbox" class="idle nohover" name="idleEna" id="idleEna" value="enable" checked disabled>
+                    <span>Enable</span>
+                </label>
+                {% else %}
+                <label>
+                    <input type="checkbox" class="idle nohover" name="idleEna" id="idleEna" value="enable" disabled>
+                    <span>Enable</span>
+                </label>
+                {% endif %}
+                {% if classData.idle == 'disable' %}
+                <label>
+                    <input type="checkbox" class="idle nohover" name="idleDis" id="idleDis" value="disable" checked disabled>
+                    <span>Disable</span>
+                </label>
+                {% else %}
+                <label>
+                    <input type="checkbox" class="idle nohover" name="idleDis" id="idleDis" value="disable" disabled>
+                    <span>Disable</span>
+                </label>
+                {% endif %}
+            </div>
+            {% if classData.idle == 'enable'%}
+            <div class="input-container" id="addIdle">
+                <div class="flex-form">
+                    <label>Limit: </label>
+                    <input type="text" name="numOfIdle" id="numOfIdle" value="{{ classData.idleTime }}" disabled>
+                </div>
+            </div>
+            {% else %}
+            <div class="input-container d-none" id="addIdle">
+                <div class="flex-form">
+                    <label>Limit: </label>
+                    <input type="text" name="numOfIdle" id="numOfIdle" value="{{ classData.idleTime }}" disabled>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock subpage %}
+
+{% block script %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var classHome = document.querySelector('#classHome');
+        var classTracker = document.querySelector('#classTracker');
+        var classPeople = document.querySelector('#classPeople');
+        var classConfig = document.querySelector('#classConfig');
+
+        classHome.classList.remove('link-active');
+        classTracker.classList.add('link-active');
+        classPeople.classList.remove('link-active');
+        classConfig.classList.remove('link-active');
+    });
+
+    var configureTracker = document.querySelector('#configureTracker');
+    var trackerPopup = document.querySelector('#tracker-popup');
+    var btnCloseTracker = document.querySelector('#btnCloseTracker');
+
+    configureTracker.addEventListener('click', () => {
+        trackerPopup.classList.add('show');
+    })
+    btnCloseTracker.addEventListener('click', () => {
+        trackerPopup.classList.remove('show');
+    })
+</script>
+{% endblock %}

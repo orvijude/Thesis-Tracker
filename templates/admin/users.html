@@ -1,0 +1,125 @@
+{% extends "admin/base.html" %}
+
+{% block title %} Admin - User {% endblock %}
+
+{% block content %}
+<div class="admin-content">
+    <div class="title">
+        <h2>User</h2>
+        <div class="btn-container">
+            <div class="btn btn-blue" id="btnAddUser">Add user</div>
+        </div>
+    </div>
+    <div class="user-table">
+        <table id="userTable" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fullname</th>
+                    <th>Username</th>
+                    <th>Email address</th>
+                    <th>Type</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usersData in usersData %}
+                    <tr>
+                        <td>{{usersData.userID}}</td>
+                        <td>{{usersData.fullname}}</td>
+                        <td>{{usersData.username}}</td>
+                        <td>{{usersData.email}}</td>
+                        <td>{{usersData.type}}</td>
+                        <td>
+                            <a href="/admin/delete-user/{{usersData.userID}}" class="btn btn-grey-red">delete</a>
+                            {% if usersData.type == 'student' %}
+                                <a href="/admin/assign-student/id={{ usersData.userID }}" class="btn btn-grey-blue">add class</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="user-popup" class="overlay hide">
+    <div class="class-container">
+        <div class="popup-title">
+            <h2>Add User</h2>
+            <div id="btnCloseUser" class="popup-close">&times;</div>
+        </div>
+        <form action="" method="POST">
+            <div class="sign-up-form">
+                <div>
+                    <div class="input-container">
+                        <label>I am a/an</label>
+                        <select id="type" name="type">
+                            <option value="student">Student</option>
+                            <option value="instructor">Instructor</option>
+                            <option value="admin">Admin</option>
+                          </select>
+                    </div>
+                    <div class="input-container">
+                        <label>Fullname:</label>
+                        <input type="text" name="fullname" id="fullname" placeholder="Your Name">
+                    </div>
+                    <div class="input-container">
+                        <label>Email Address:</label>
+                        <input type="email" name="email" id="email" placeholder="your@email.com">
+                    </div>
+                </div>
+                <div class="margin">
+                    <div class="input-container">
+                        <label>Username:</label>
+                        <input type="text" name="username" id="username" placeholder="username">
+                    </div>
+                    <div class="input-container">
+                        <label>Password:</label>
+                        <input type="password" name="password" id="password" placeholder="•••••••••••••">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-blue" id="addUser">Add User</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block script %}
+<script>
+    $(document).ready(function() {
+        $('#userTable').DataTable({     
+        "aLengthMenu": [[3, 5, 10, 25, -1], [3, 5, 10, 25, "All"]],
+            "iDisplayLength": 10
+        } 
+        );
+    });
+
+    var btnAddUser = document.querySelector('#btnAddUser');
+    var userPopup = document.querySelector('#user-popup');
+    var btnCloseUser = document.querySelector('#btnCloseUser')
+
+    btnAddUser.addEventListener('click', () => {
+        userPopup.classList.add('show');
+    })
+    btnCloseUser.addEventListener('click', () => {
+        userPopup.classList.remove('show');
+    })
+
+    document.querySelectorAll('.add-class').forEach(function(el){
+        
+        el.addEventListener('click', function() {
+            var x = document.getElementsByClassName(this.id)
+            document.querySelectorAll('.add-class-content').forEach(function(a){ 
+                if (x[0].classList.contains(this.id)) {
+                    console.log('pass')
+                }
+            });
+            x[0].style.display = "block";
+        });
+    });
+
+</script>
+{% endblock %}

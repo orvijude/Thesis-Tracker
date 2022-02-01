@@ -1,0 +1,107 @@
+{% extends "public/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="title">
+    <h1>Dashboard <span class="sm-grey">Instructor</span> </h1>
+    <div id="btnCreateClass" class="btn btn-blue">Create Class</div>
+</div>
+<div class="class-wrapper">
+    {% for classData in classData %} 
+    <a href="/classid={{ classData.classID }}" class="class-card" style="border-top: 5px solid {{ classData['classColor'] }};">
+        <h4>{{ classData['className'] }}</h4>
+        <span>Class Schedule:</span>
+        <p>Time: {{ classData['classTimeStart'] }} - {{ classData['classTimeEnd'] }} </p>
+        <p>Day: {{ classData['classDay'] }} </p>
+    </a>
+    {% endfor %}
+</div>
+<div id="class-popup" class="overlay hide">
+    <div class="class-container">
+        <div class="popup-title">
+            <h2>Create Class</h2>
+            <div id="btnCloseClass" class="popup-close">&times;</div>
+        </div>
+        <form id="createClassForm" method="POST">
+            <div class="flex-form">
+                <div>
+                    <p>Class Details</p>
+                    <div class="input-container">
+                        <label>Class Name:</label>
+                        <input type="text" name="className" id="className" placeholder="enter class name here" required>
+                    </div>
+                    <div class="input-container">
+                        <label>Class Description</label>
+                        <input type="text" name="classDesc" id="classDesc" placeholder="enter class description here" required>
+                    </div>
+                    <div class="input-container">
+                        <label>Color:</label>
+                        <input type="color" name="classColor" id="classColor">
+                    </div>
+                </div>
+                <div>
+                    <p>Class Schedule</p>
+                    <div class="input-container">
+                        <label>Time Start at:</label>
+                        <input type="time" name="classTimeStart" id="classTimeStart" required>
+                    </div>
+                    <div class="input-container">
+                        <label>Time End at:</label>
+                        <input type="time" name="classTimeEnd" id="classTimeEnd" required>
+                    </div>
+                    <div class="checkbox-container">
+                        <label>Day:</label>
+                        <div class="custom-day">
+                            <label>
+                                <input type="checkbox" class="day" name="day" id="mon" value="Mon" required>
+                                <span>Mon</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" class="day" name="day" id="tue" value="Tue" required>
+                                <span>Tue</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" class="day" name="day" id="wed" value="Wed" required>
+                                <span>Wed</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" class="day" name="day" id="thu" value="Thu" required>
+                                <span>Thu</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" class="day" name="day" id="fri" value="Fri" required>
+                                <span>Fri</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" class="day" name="day" id="sat" value="Sat" required>
+                                <span>Sat</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" class="day" name="day" id="sun" value="Sun"required>
+                                <span>Sun</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-blue" id="createClass">Create</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    var btnCreateClass = document.querySelector('#btnCreateClass');
+    var createClassPopup = document.querySelector('#class-popup');
+    var btnClose = document.querySelector('#btnCloseClass')
+
+    btnCreateClass.addEventListener('click', () => {
+        createClassPopup.classList.add('show');
+    })
+    btnClose.addEventListener('click', () => {
+        createClassPopup.classList.remove('show');
+    })
+</script>
+{% endblock %}

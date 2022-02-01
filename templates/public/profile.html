@@ -1,0 +1,198 @@
+{% extends "public/base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="title">
+    <h1>Profile</h1>
+</div>
+<div class="profile-container">
+    <div class="profile-left-wrapper">
+        <div class="img">
+            <p>{{ img }}</p>
+        </div>
+        <a href="{{ url_for('sign_out') }}" class="btn btn-red">Sign out</a>
+    </div>
+    <div class="profile-right-wrapper">
+        <div class="details-wrapper">
+            <div class="details-container">
+                <h2>User Information</h2>
+                <div class="details-card">
+                    <span>Fullname:</span>
+                    <h6>{{ userData.fullname }}</h6>
+                </div>
+                <div class="details-card">
+                    <span>Email Address:</span>
+                    <h6>{{ userData.email }}</h6>
+                </div>
+                <div class="details-card">
+                    <span>Username:</span>
+                    <h6>{{ userData.username }}</h6>
+                </div>
+                <div class="details-card">
+                    <span>Type:</span>
+                    <h6>{{ userData.type }}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="user-settings-wrapper">
+            <h2>User Settings</h2>
+            <div class="setting-cards">
+                <div class="setting-info">
+                    <h3>Edit Profile</h3>
+                    <p>You can update or change your fullname, email address and username.</p>
+                </div>
+                <div class="btn btn-blue" id="editProfile">Edit Profile</div>
+            </div>
+            <div class="setting-cards">
+                <div class="setting-info">
+                    <h3>Change Type</h3>
+                    <p>Changing your user type will automatically remove you from the classes you created or joined.</p>
+                </div>
+                <div class="btn btn-blue" id="changeType">Change Type</div>
+            </div>
+            <div class="setting-cards">
+                <div class="setting-info">
+                    <h3>Change Password</h3>
+                    <p>Change password of your account.</p>
+                </div>
+                <div class="btn btn-blue" id="changePassword">Change Password</div>
+            </div>
+            <div class="setting-cards">
+                <div class="setting-info">
+                    <h3>Delete Account</h3>
+                    <p>This will delete your account forever.</p>
+                </div>
+                <div class="btn btn-red" id="deleteAccount">Delete Account</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="edit-profile-popup" class="overlay hide">
+    <div class="class-container profile">
+        <div class="popup-title">
+            <h2>Edit Profile</h2>
+            <div id="btnCloseEditProfile" class="popup-close">&times;</div>
+        </div>
+        <form action="">
+            <div class="input-container">
+                <label>Fullname: </label>
+                <input type="text" name="fullname" id="fullname" value="{{ userData.fullname }}">
+            </div>
+            <div class="input-container">
+                <label>Email Address: </label>
+                <input type="email" name="email" id="email" value="{{ userData.email }}">
+            </div>
+            <div class="input-container">
+                <label>Username: </label>
+                <input type="text" name="username" id="username" value="{{ userData.username }}">
+            </div>
+            <button type="submit" class="btn btn-blue" id="updateProfile">Update Profile</button>
+        </form>
+    </div>
+</div>
+<div id="change-type-popup" class="overlay hide">
+    <div class="class-container profile type">
+        <div class="popup-title">
+            <h2>Change Type</h2>
+            <div id="btnCloseChangeType" class="popup-close">&times;</div>
+        </div>
+        <form action="">
+            <div class="input-container">
+                <label>Type</label>
+                {% if userData.type == 'student' %}
+                <select id="type" name="type">
+                    <option value="student" selected>Student</option>
+                    <option value="instructor">Instructor</option>
+                </select>
+                {% elif userData.type == 'instructor' %}
+                <select id="type" name="type">
+                    <option value="student">Student</option>
+                    <option value="instructor" selected>Instructor</option>
+                </select>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-blue" id="confirmType">Confirm</button>
+        </form>
+    </div>
+</div>
+<div id="change-password-popup" class="overlay hide">
+    <div class="class-container profile password">
+        <div class="popup-title">
+            <h2>Change Password</h2>
+            <div id="btnCloseChangePassword" class="popup-close">&times;</div>
+        </div>
+        <form id="passwordForm">
+            <div class="input-container">
+                <label>Current Password</label>
+                <input type="password" name="password" id="password" required>
+            </div>
+            <div class="input-container">
+                <label>New Password</label>
+                <input type="password" name="new_password" id="newPassword" required>
+            </div>
+            <button type="submit" class="btn btn-blue" id="updatePassword">Update Password</button>
+        </form>
+    </div>
+</div>
+<div id="delete-account-popup" class="overlay hide">
+    <div class="class-container profile type">
+        <div class="popup-title">
+            <h2>Delete Account</h2>
+            <div id="btnCloseDeleteAccount" class="popup-close">&times;</div>
+        </div>
+        <form action="">
+            <div class="input-container">
+                <label>Please type your <strong>Password</strong> to confirm.</label>
+                <input type="password" name="da-password" id="da-password" required>
+            </div>
+            <button type="submit" class="btn btn-red" id="delete">Delete Account</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    // Edit Profile
+    var editProfilePopup = document.querySelector('#edit-profile-popup');
+    var btnEditProfile = document.querySelector('#editProfile');
+    var btnCloseEditProfile = document.querySelector('#btnCloseEditProfile')
+    btnEditProfile.addEventListener('click', () => {
+        editProfilePopup.classList.add('show');
+    })
+    btnCloseEditProfile.addEventListener('click', () => {
+        editProfilePopup.classList.remove('show');
+    })
+    // Type
+    var changeTypePopup = document.querySelector('#change-type-popup')
+    var btnChangeType = document.querySelector('#changeType');
+    var btnCloseChangeType = document.querySelector('#btnCloseChangeType')
+    btnChangeType.addEventListener('click', () => {
+        changeTypePopup.classList.add('show');
+    })
+    btnCloseChangeType.addEventListener('click', () => {
+        changeTypePopup.classList.remove('show');
+    })
+    // Password
+    var changePasswordPopup = document.querySelector('#change-password-popup')
+    var changePassword = document.querySelector('#changePassword');
+    var btnCloseChangePassword = document.querySelector('#btnCloseChangePassword')
+    changePassword.addEventListener('click', () => {
+        changePasswordPopup.classList.add('show');
+    })
+    btnCloseChangePassword.addEventListener('click', () => {
+        changePasswordPopup.classList.remove('show');
+    })
+    // delete account
+    var deleteAccountPopup = document.querySelector('#delete-account-popup')
+    var deleteAccount = document.querySelector('#deleteAccount');
+    var btnCloseDeleteAccount = document.querySelector('#btnCloseDeleteAccount')
+    deleteAccount.addEventListener('click', () => {
+        deleteAccountPopup.classList.add('show');
+    })
+    btnCloseDeleteAccount.addEventListener('click', () => {
+        deleteAccountPopup.classList.remove('show');
+    })
+</script>
+{% endblock %}

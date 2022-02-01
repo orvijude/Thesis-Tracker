@@ -1,0 +1,52 @@
+{% extends "public/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="title">
+    <h1>Dashboard <span class="sm-grey">Student</span> </h1>
+    <div id="btnJoinClass" class="btn btn-blue">Join Class</div>
+</div>
+<div class="class-wrapper">
+    {% for classData in classData %} 
+    {% if classData.publish != '0' %}
+    <a href="/classid={{ classData.classID }}" class="class-card" style="border-top: 5px solid {{ classData['classColor'] }};">
+        <h4>{{ classData['className'] }}</h4>
+        <span>Class Schedule:</span>
+        <p>Time: {{ classData['classTimeStart'] }} - {{ classData['classTimeEnd'] }} </p>
+        <p>Day: {{ classData['classDay'] }} </p>
+    </a>
+    {% endif %}
+    {% endfor %}
+</div>
+<div id="class-popup" class="overlay hide">
+    <div class="class-container join">
+        <div class="popup-title">
+            <h2>Join Class</h2>
+            <div id="btnCloseClass" class="popup-close">&times;</div>
+        </div>
+        <form id="joinClassForm" method="POST">
+            <div class="input-container">
+                <label>Enter Class ID / Code</label>
+                <input type="text" name="classID" id="classID">
+            </div>
+            <button type="submit" class="btn btn-blue" id="joinClass">Join Class</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    var btnJoinClass = document.querySelector('#btnJoinClass');
+    var createClassPopup = document.querySelector('#class-popup');
+    var btnClose = document.querySelector('#btnCloseClass')
+
+    btnJoinClass.addEventListener('click', () => {
+        createClassPopup.classList.add('show');
+    })
+    btnClose.addEventListener('click', () => {
+        createClassPopup.classList.remove('show');
+    })
+</script>
+{% endblock %}

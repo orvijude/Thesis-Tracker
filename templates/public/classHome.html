@@ -1,0 +1,68 @@
+{% extends "public/classBase.html" %}
+
+{% block title %} Home - {{ classData['className'] }} {% endblock %}
+
+{% block subpage %}
+<div class="class-subpage">
+    <h4>Class Details</h4>
+    <div class="class-info">
+        <span>Class Code:</span>
+        <p> {{ classData['classID'] }} </p>
+    </div>
+
+    <div class="class-info">
+        <span>Class Description:</span>
+        <p> {{ classData['classDesc'] }} </p>
+    </div>
+
+    <div class="class-info">
+        <span>Class Schedule:</span>
+        <p>Time: {{ classData['classTimeStart'] }} - {{ classData['classTimeEnd'] }} </p>
+        <p>Day: {{ classData['classDay'] }} </p>
+    </div>
+
+    <div class="class-info">
+        <span>Class Instructor:</span>
+        <p>{{ classData['fullname'] }}</p>
+    </div>
+
+    <div class="class-home">
+    {% if userData.type == 'instructor' %}
+        {% if classData.publish == '0' %}
+        <div class="class-home-tip stroke-orange">
+            <h3>This class is unpublish</h3>
+            <p>To publish class click the button below.</p>
+            <form method="POST">
+                <input type="text" id="publishValue" value="1" hidden>
+                <button type="submit" class="btn btn-blue" id="publishBtn">
+                    Publish
+                </button>
+            </form>
+        </div>
+        {% endif %}
+    {% endif %}
+    {% if userData.type == 'instructor' %}
+    <div class="class-home-tip">
+        <h3>To Block Websites and Applications</h3>
+        <a href="/classid={{ classData.classID }}/configure">Click Here <img src=" {{ url_for('static', filename='icons/arrow-right.svg') }} " alt="arrow right icon"> </a>
+    </div>
+    {% endif %}
+    </div>
+</div>
+{% endblock subpage %}
+
+{% block script %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var classHome = document.querySelector('#classHome');
+        var classTracker = document.querySelector('#classTracker');
+        var classPeople = document.querySelector('#classPeople');
+        var classConfig = document.querySelector('#classConfig');
+
+        classHome.classList.add('link-active');
+        classTracker.classList.remove('link-active');
+        classPeople.classList.remove('link-active');
+        classConfig.classList.remove('link-active');
+    });
+</script>
+{% endblock %}

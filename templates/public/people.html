@@ -1,0 +1,47 @@
+{% extends "public/classBase.html" %}
+
+{% block title %} People - {{ classData['className'] }} {% endblock %}
+
+{% block subpage %}
+<div class="class-subpage">
+    <h4>People</h4>
+    <div class="people-wrapper">
+        <h5>Instructor</h5>
+        <table class="table-people">
+            <tr>
+                <th>Name</th>
+            </tr>
+            <tr>
+                <td>{{ instructor.fullname }}</td>
+            </tr>
+        </table>
+        <h5>Students</h5>
+        <table class="table-people">
+            <tr>
+                <th>Name</th>
+            </tr>
+            {% for students in students %}
+            <tr>
+                <td>{{ students.fullname }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock subpage %}
+
+{% block script %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var classHome = document.querySelector('#classHome');
+        var classTracker = document.querySelector('#classTracker');
+        var classPeople = document.querySelector('#classPeople');
+        var classConfig = document.querySelector('#classConfig');
+
+        classHome.classList.remove('link-active');
+        classTracker.classList.remove('link-active');
+        classPeople.classList.add('link-active');
+        classConfig.classList.remove('link-active');
+    });
+</script>
+{% endblock %}

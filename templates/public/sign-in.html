@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='scss/style.css') }}">
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</head>
+<body>
+    <div class="sign-wrapper">
+        <div class="left-container">
+            <h1>E-learning Monitoring Tool: 
+                Student Activity Tracker</h1>
+        </div>
+        <div class="right-container">
+            <h1>Welcome</h1>
+            <p>Please sign in your account.</p>
+            <form action="{{ url_for('sign_in') }}" method="POST">
+                <div class="input-container">
+                    <label>Username:</label>
+                    <input type="text" name="username" id="username" placeholder="username or email address">
+                </div>
+                <div class="input-container">
+                    <label>Password:</label>
+                    <input type="password" name="password" id="password" placeholder="•••••••••••••">
+                </div>
+                <button type="submit" class="btn btn-blue">Sign In</button>
+            </form>
+            <a href="/google_signin" class="google-btn">
+                <img src="{{ url_for('static', filename='icons/google.svg') }}" alt="google icon">
+                <p>Sign in with Google</p>
+            </a>
+            <span>Don't have an account? <a href="{{ url_for('sign_up') }}">Sign Up Here</a> </span>
+        </div>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <!-- Do something with the message -->
+                <div class="notification-popup {{category}}">
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</body>
+</html>

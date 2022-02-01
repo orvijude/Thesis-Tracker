@@ -1,0 +1,57 @@
+{% extends "public/classBase.html" %}
+
+{% block title %} Tracker - {{ classData['className'] }} {% endblock %}
+
+{% block subpage %}
+<div class="class-subpage">
+    <div class="title">
+        <h4>Tracker</h4>
+        <div class="btn btn-grey-blue" id="configureTracker">Configure Tracker</div>
+    </div>
+    <div class="red-container">
+        
+        <h4>Tracker Running...</h4>
+        <div class="spinner">
+            <div class="bubble-1"></div>
+            <div class="bubble-2"></div>
+        </div>
+        <br>
+        <a href="/classid={{classData.classID}}/tracker/stop" class="btn btn-red">Stop Tracker</a>
+    </div>
+</div>
+<div id="tracker-popup" class="overlay hide">
+    <div class="class-container config-track">
+        <div id="btnCloseTracker" class="popup-close">&times;</div>
+        <h2>Configure Tracker</h2>
+        <div class="config-view">
+            <ul>
+                <li><strong>Blocker</strong> : {{ classData.blocker }}</li>
+                <li><strong>Keyboard Shortcut</strong> : {{ classData.kbLimit }}</li>
+                <li><strong>Idle</strong> : {{ classData.idle }}</li>
+                {% if classData.idle == 'enable' %}
+                <li><strong>Idle Time: </strong> {{ classData.idleTime }} </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock subpage %}
+
+{% block script %}
+<script>
+    var configureTracker = document.querySelector('#configureTracker');
+    var trackerPopup = document.querySelector('#tracker-popup');
+    var btnCloseTracker = document.querySelector('#btnCloseTracker');
+
+    configureTracker.addEventListener('click', () => {
+        trackerPopup.classList.add('show');
+    })
+    btnCloseTracker.addEventListener('click', () => {
+        trackerPopup.classList.remove('show');
+    })
+
+    setInterval(function() {
+        $('.track').load(location.href + " .track");
+    }, 10000);   // Interval set to 10 seconds
+</script>
+{% endblock %}

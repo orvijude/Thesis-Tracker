@@ -1,0 +1,60 @@
+{% extends "admin/base.html" %}
+
+{% block title %} Assign Student {% endblock %}
+
+{% block content %}
+<div class="admin-content">
+    <div class="title">
+        <h2>Assign Student - {{ userData.fullname }}</h2>
+    </div>
+    <div class="user-table">
+        <table id="classTable" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ClassID</th>
+                    <th>Class Name</th>
+                    <th>Class Description</th>
+                    <th>Time Start</th>
+                    <th>Time End</th>
+                    <th>Day</th>
+                    <th>Instructor</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for classData in classData %}
+                    <tr>
+                        <td>{{classData['classID']}}</td>
+                        <td>{{classData.className}}</td>
+                        <td>{{classData.classDesc}}</td>
+                        <td>{{classData.classTimeStart}}</td>
+                        <td>{{classData.classTimeEnd}}</td>
+                        <td>{{classData.classDay}}</td>
+                        <td>{{classData.fullname}}</td>
+                        <td>
+                            {% if classData['classID'] in studentClass %}
+                                <a href="#" class="btn btn-grey-red">remove</a>
+                            {% else %}
+                                <a href="/admin/assign-student/id={{userData['userID']}}/add-class/id={{classData['classID']}}" class="btn btn-grey-blue">add</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block script %}
+<script>
+    $(document).ready(function() {
+        $('#classTable').DataTable({     
+            "aLengthMenu": [[3, 5, 10, 25, -1], [3, 5, 10, 25, "All"]],
+                "iDisplayLength": 10
+            } 
+        );
+    });
+</script>
+{% endblock %}

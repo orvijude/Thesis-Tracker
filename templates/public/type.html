@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='scss/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-3.4.1.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+</head>
+<body>
+    <form action="{{ url_for('onboard') }}" method="POST" class="onboard-form">
+        <h4>We need more info about youuu.</h4>
+        <div class="onboard-inner-form">
+                <div class="input-container">
+                    <label>Select type</label>
+                    <select id="type" name="type">
+                        <option value="student">Student</option>
+                        <option value="instructor">Instructor</option>
+                      </select>
+                </div>
+                <div class="input-container">
+                    <label>Fullname:</label>
+                    <input type="text" name="fullname" id="fullname" value="{{name}}">
+                </div>
+                <div class="input-container">
+                    <label>Email Address:</label>
+                    <input type="email" name="email" id="email" value="{{email}}">
+                </div>
+        </div>
+        <button type="submit" class="btn btn-blue">Continue</button>
+    </form>
+</body>
+</html>

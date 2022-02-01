@@ -1,0 +1,368 @@
+{% extends "public/classBase.html" %}
+
+{% block title %} Tracker - {{ classData['className'] }} {% endblock %}
+
+{% block subpage %}
+<div class="class-subpage">
+    <div class="title">
+        <h4>Tracker</h4>
+        <div class="btn-flex">
+            {% if classData.viewType == 'grid' %}
+                <form method="POST">
+                    <input type="text" id="gridValue" value="grid" hidden>
+                    <button type="submit" class="viewType viewActive" id="gridView">
+                        <img src=" {{ url_for('static', filename='icons/grid.svg') }} " alt="grid icon">
+                    </button>
+                </form>
+            {% else %}
+                <form method="POST">
+                    <input type="text" id="gridValue" value="grid" hidden>
+                    <button type="submit" class="viewType" id="gridView">
+                        <img src=" {{ url_for('static', filename='icons/grid.svg') }} " alt="grid icon">
+                    </button>
+                </form>
+            {% endif %}
+
+            {% if classData.viewType == 'list' %}
+                <form method="POST">
+                    <input type="text" id="listValue" value="list" hidden>
+                    <button type="submit" class="viewType viewActive" id="listView">
+                        <img src=" {{ url_for('static', filename='icons/lists.svg') }} " alt="list icon">
+                    </button>
+                </form>
+            {% else %}
+                <form method="POST">
+                    <input type="text" id="listValue" value="list" hidden>
+                    <button type="submit" class="viewType" id="listView">
+                        <img src=" {{ url_for('static', filename='icons/lists.svg') }} " alt="list icon">
+                    </button>
+                </form>
+            {% endif %}
+
+            <div class="btn btn-blue" id="configureTracker">Configure Tracker</div>
+        </div>
+    </div>
+    <div id="wrapper">
+    {% if classData.viewType == 'grid' %}
+    <div class="student-wrapper">
+        {% for studentLists in studentLists %}
+            {% if studentLists[2] == '1' %}
+                {% if studentLists[3] in prodApps %}
+                    <a href="/classid={{classData.classID}}/tracker/view={{studentLists[0]}}" class="student-card prod-app">
+                        {% if studentLists[5] == '1' %}
+                            <div class="ext"></div>
+                        {% else %}
+                            <div class="ext an"></div>
+                        {% endif %}
+                        <div class="img">
+                            <p>{{ studentLists[4] }}</p>
+                        </div>
+                        <h4>{{ studentLists[1] }}</h4>
+                        <p>{{ studentLists[3] }}</p>
+                    </a>
+                {% else %}
+                    <a href="/classid={{classData.classID}}/tracker/view={{studentLists[0]}}" class="student-card not-prod-app">
+                        {% if studentLists[5] == '1' %}
+                            <div class="ext"></div>
+                        {% else %}
+                            <div class="ext an"></div>
+                        {% endif %}
+                        <div class="img">
+                            <p>{{ studentLists[4] }}</p>
+                        </div>
+                        <h4>{{ studentLists[1] }}</h4>
+                        <p>{{ studentLists[3] }}</p>
+                    </a>
+                {% endif %}
+            {% elif studentLists[2] == '3' %}
+                <a href="/classid={{classData.classID}}/tracker/view={{studentLists[0]}}" class="student-card idled">
+                    {% if studentLists[5] == '1' %}
+                            <div class="ext"></div>
+                        {% else %}
+                            <div class="ext an"></div>
+                        {% endif %}
+                    <div class="img">
+                        <p>{{ studentLists[4] }}</p>
+                    </div>
+                    <h4>{{ studentLists[1] }}</h4>
+                    <p>Idled</p>
+                </a>
+            {% else %}
+                <a href="/classid={{classData.classID}}/tracker/view={{studentLists[0]}}" class="student-card">
+                    {% if studentLists[5] == '1' %}
+                            <div class="ext"></div>
+                        {% else %}
+                            <div class="ext an"></div>
+                        {% endif %}
+                    <div class="img">
+                        <p>{{ studentLists[4] }}</p>
+                    </div>
+                    <h4>{{ studentLists[1] }}</h4>
+                    <p>Offline</p>
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if classData.viewType == 'list' %}
+    <div class="student-wrapper-list">
+        {% for studentLists in studentLists %}
+            {% if studentLists[2] == '1' %}
+                {% if studentLists[3] in prodApps %}
+                    <a href="/classid={{classData.classID}}/tracker/view={{studentLists[0]}}" class="student-card-list prod-app">
+                        {% if studentLists[5] == '1' %}
+                            <div class="ext"></div>
+                        {% else %}
+                            <div class="ext an"></div>
+                        {% endif %}
+                        <div class="img">
+                            <p>{{ studentLists[4] }}</p>
+                        </div>
+                        <h4>{{ studentLists[1] }}</h4>
+                        <p>{{ studentLists[3] }}</p>
+                    </a>
+                {% else %} 
+                    <a href="/classid={{classData.classID}}/tracker/view={{studentLists[0]}}" class="student-card-list not-prod-app">
+                        {% if studentLists[5] == '1' %}
+                            <div class="ext"></div>
+                        {% else %}
+                            <div class="ext an"></div>
+                        {% endif %}
+                        <div class="img">
+                            <p>{{ studentLists[4] }}</p>
+                        </div>
+                        <h4>{{ studentLists[1] }}</h4>
+                        <p>{{ studentLists[3] }}</p>
+                    </a>
+                {% endif %}
+            {% elif studentLists[2] == '3' %}
+                <a href="/classid={{classData.classID}}/tracker/view={{studentLists[0]}}" class="student-card-list idled">
+                    {% if studentLists[5] == '1' %}
+                            <div class="ext"></div>
+                        {% else %}
+                            <div class="ext an"></div>
+                        {% endif %}
+                    <div class="img">
+                        <p>{{ studentLists[4] }}</p>
+                    </div>
+                    <h4>{{ studentLists[1] }}</h4>
+                    <p>Idled</p>
+                </a>
+            {% else %}
+                <a href="/classid={{classData.classID}}/tracker/view={{studentLists[0]}}" class="student-card-list">
+                    {% if studentLists[5] == '1' %}
+                            <div class="ext"></div>
+                        {% else %}
+                            <div class="ext an"></div>
+                        {% endif %}
+                    <div class="img">
+                        <p>{{ studentLists[4] }}</p>
+                    </div>
+                    <h4>{{ studentLists[1] }}</h4>
+                    <p>Offline</p>
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+    </div>
+</div>
+
+<div id="tracker-popup" class="overlay hide">
+    <div class="class-container config-track">
+        <div id="btnCloseTracker" class="popup-close">&times;</div>
+        <h2>Configure Tracker</h2>
+        <form action="" id="tracker-config-wrapper">
+            <div class="track-config-container">
+                <h5>Blocker</h5>
+                <div class="checkbox-container">
+                    {% if classData.blocker == 'enable' %}
+                    <label>
+                        <input type="checkbox" class="blocker" name="blockerEna" id="blockerEna" value="enable" checked>
+                        <span>Enable</span>
+                    </label>
+                    {% else %}
+                    <label>
+                        <input type="checkbox" class="blocker" name="blockerEna" id="blockerEna" value="enable">
+                        <span>Enable</span>
+                    </label>
+                    {% endif %}
+                    {% if classData.blocker == 'disable' %}
+                    <label>
+                        <input type="checkbox" class="blocker" name="blockerDis" id="blockerDis" value="disable" checked>
+                        <span>Disable</span>
+                    </label>
+                    {% else %}
+                    <label>
+                        <input type="checkbox" class="blocker" name="blockerDis" id="blockerDis" value="disable">
+                        <span>Disable</span>
+                    </label>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="track-config-container">
+                <h5>Keyboard Shortcut</h5>
+                <div class="checkbox-container">
+                    {% if classData.keystrokes == 'enable' %}
+                    <label>
+                        <input type="checkbox" class="kbLimit" name="kbLimitEna" id="kbLimitEna" value="enable" checked>
+                        <span>Enable</span>
+                    </label>
+                    {% else %}
+                    <label>
+                        <input type="checkbox" class="kbLimit" name="kbLimitEna" id="kbLimitEna" value="enable">
+                        <span>Enable</span>
+                    </label>
+                    {% endif %}
+                    {% if classData.keystrokes == 'disable' %}
+                    <label>
+                        <input type="checkbox" class="kbLimit" name="kbLimitDis" id="kbLimitDis" value="disable" checked>
+                        <span>Disable</span>
+                    </label>
+                    {% else %}
+                    <label>
+                        <input type="checkbox" class="kbLimit" name="kbLimitDis" id="kbLimitDis" value="disable">
+                        <span>Disable</span>
+                    </label>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="track-config-container">
+                <h5>Idle</h5>
+                <div class="checkbox-container">
+                    {% if classData.idle == 'enable' %}
+                    <label>
+                        <input type="checkbox" class="idle" name="idleEna" id="idleEna" value="enable" checked>
+                        <span>Enable</span>
+                    </label>
+                    {% else %}
+                    <label>
+                        <input type="checkbox" class="idle" name="idleEna" id="idleEna" value="enable">
+                        <span>Enable</span>
+                    </label>
+                    {% endif %}
+                    {% if classData.idle == 'disable' %}
+                    <label>
+                        <input type="checkbox" class="idle" name="idleDis" id="idleDis" value="disable" checked>
+                        <span>Disable</span>
+                    </label>
+                    {% else %}
+                    <label>
+                        <input type="checkbox" class="idle" name="idleDis" id="idleDis" value="disable">
+                        <span>Disable</span>
+                    </label>
+                    {% endif %}
+                </div>
+                {% if classData.idle == 'enable'%}
+                <div class="input-container" id="addIdle">
+                    <div class="flex-form">
+                        <label>Limit: </label>
+                        <input type="text" name="numOfIdle" id="numOfIdle" value="{{ classData.idleTime }}">
+                    </div>
+                </div>
+                {% else %}
+                <div class="input-container d-none" id="addIdle">
+                    <div class="flex-form">
+                        <label>Limit: </label>
+                        <input type="text" name="numOfIdle" id="numOfIdle" value="{{ classData.idleTime }}">
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-blue" id="saveTrackConfig">Save</button>
+        </form>
+    </div>
+</div>
+{% endblock subpage %}
+
+{% block script %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var classHome = document.querySelector('#classHome');
+        var classTracker = document.querySelector('#classTracker');
+        var classPeople = document.querySelector('#classPeople');
+        var classConfig = document.querySelector('#classConfig');
+
+        classHome.classList.remove('link-active');
+        classTracker.classList.add('link-active');
+        classPeople.classList.remove('link-active');
+        classConfig.classList.remove('link-active');
+    });
+    var gridView = document.querySelector('#gridView');
+    var listView = document.querySelector('#listView'); 
+
+    gridView.addEventListener('click', function() {
+        if (!(gridView.classList.contains('viewActive'))) {
+            gridView.classList.add('viewActive');
+            listView.classList.remove('viewActive');
+        }
+        else {
+            gridView.classList.add('viewActive');
+        }
+    });
+    listView.addEventListener('click', function() {
+        if (!(listView.classList.contains('viewActive'))) {
+            listView.classList.add('viewActive');
+            gridView.classList.remove('viewActive');
+        }
+        else {
+            listView.classList.add('viewActive');
+        }
+    });
+
+    var configureTracker = document.querySelector('#configureTracker');
+    var trackerPopup = document.querySelector('#tracker-popup');
+    var btnCloseTracker = document.querySelector('#btnCloseTracker');
+
+    configureTracker.addEventListener('click', () => {
+        trackerPopup.classList.add('show');
+    })
+    btnCloseTracker.addEventListener('click', () => {
+        trackerPopup.classList.remove('show');
+    })
+
+    var blockerEna = document.querySelector('#blockerEna');
+    var blockerDis = document.querySelector('#blockerDis');
+    blockerEna.addEventListener('click', () => {
+        blockerEna.checked = true
+        blockerDis.checked = false;
+    })
+    blockerDis.addEventListener('click', () => {
+        blockerDis.checked = true
+        blockerEna.checked = false;
+    })
+    
+    // kb limit
+    var kbLimitEna = document.querySelector('#kbLimitEna');
+    var kbLimitDis = document.querySelector('#kbLimitDis');
+
+    kbLimitEna.addEventListener('click', () => {
+        kbLimitEna.checked = true
+        kbLimitDis.checked = false;
+    })
+    kbLimitDis.addEventListener('click', () => {
+        kbLimitDis.checked = true
+        kbLimitEna.checked = false;
+    })
+
+    var idleEna = document.querySelector('#idleEna');
+    var idleDis = document.querySelector('#idleDis');
+    var addIdle = document.querySelector('#addIdle');
+
+    idleEna.addEventListener('click', () => {
+        idleEna.checked = true
+        idleDis.checked = false;
+        addIdle.classList.remove('d-none');
+    })
+    idleDis.addEventListener('click', () => {
+        idleEna.checked = false;
+        idleDis.checked = true
+        addIdle.classList.add('d-none');
+    })
+
+    setInterval(function() {
+        $('#wrapper').load(location.href + " #wrapper");
+    }, 1000);
+</script>
+{% endblock %}

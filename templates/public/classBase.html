@@ -1,0 +1,27 @@
+{% extends "public/base.html" %}
+
+{% block title %} {% endblock %}
+
+{% block content %}
+<div class="title">
+    <h1>{{ classData['className'] }} {% if userData.type == 'instructor' %} <span class="sm-grey">Instructor</span> {% else %} <span class="sm-grey"> Student </span> {% endif %}</h1>
+</div>
+<ul class="class-menu">
+    <li><a href="/classid={{ classData.classID }}" id="classHome">Home</a></li>
+    <li><a href="/classid={{ classData.classID }}/tracker" id="classTracker">Tracker</a></li>
+    <li><a href="/classid={{ classData.classID }}/people" id="classPeople">People</a></li>
+    <li><a href="/classid={{ classData.classID }}/configure" id="classConfig">Configure</a></li>
+</ul>
+
+
+{% if status == '1' %}
+<div class="tracker-modal">
+    <img src=" {{ url_for('static', filename='icons/tracker.svg') }} " alt="tracker icon">
+</div>
+{% endif %}
+
+{% block subpage %} 
+{% endblock subpage %}
+
+{% endblock content %}
+

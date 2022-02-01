@@ -1,0 +1,151 @@
+{% extends "admin/base.html" %}
+
+{% block title %} Admin - Class {% endblock %}
+
+{% block content %}
+<div class="admin-content">
+    <div class="title">
+        <h2>Class</h2>
+        <div class="btn-container">
+            <div class="btn btn-blue" id="btnAddClass">Add Class</div>
+        </div>
+    </div>
+    <div class="user-table">
+        <table id="classTable" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ClassID</th>
+                    <th>Class Name</th>
+                    <th>Class Description</th>
+                    <th>Time Start</th>
+                    <th>Time End</th>
+                    <th>Day</th>
+                    <th>Instructor</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for classData in classData %}
+                    <tr>
+                        <td>{{classData['classID']}}</td>
+                        <td>{{classData.className}}</td>
+                        <td>{{classData.classDesc}}</td>
+                        <td>{{classData.classTimeStart}}</td>
+                        <td>{{classData.classTimeEnd}}</td>
+                        <td>{{classData.classDay}}</td>
+                        <td>{{classData.fullname}}</td>
+                        <td>
+                            <a href="/admin/delete-class/{{classData['classID']}}" class="btn btn-grey-red">delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="class-popup" class="overlay hide">
+    <div class="class-container" style="height:580px;margin-top: 40px;">
+        <div class="popup-title">
+            <h2>Create Class</h2>
+            <div id="btnCloseClass" class="popup-close">&times;</div>
+        </div>
+        <form id="createClassForm" method="POST">
+            <div class="flex-form">
+                <div>
+                    <p>Class Details</p>
+                    <div class="input-container">
+                        <label>Class Name:</label>
+                        <input type="text" name="className" id="className" placeholder="enter class name here" required>
+                    </div>
+                    <div class="input-container">
+                        <label>Class Description</label>
+                        <input type="text" name="classDesc" id="classDesc" placeholder="enter class description here" required>
+                    </div>
+                    <div class="input-container">
+                        <label>Color:</label>
+                        <input type="color" name="classColor" id="classColor">
+                    </div>
+                    <div class="input-container">
+                        <label>Instructor:</label>
+                        <select id="instructor" name="instructor">
+                            {% for instructor in instructor %}
+                            <option value="{{ instructor.userID }}">{{ instructor.fullname }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <p>Class Schedule</p>
+                    <div class="input-container">
+                        <label>Time Start at:</label>
+                        <input type="time" name="classTimeStart" id="classTimeStart" required>
+                    </div>
+                    <div class="input-container">
+                        <label>Time End at:</label>
+                        <input type="time" name="classTimeEnd" id="classTimeEnd" required>
+                    </div>
+                    <div class="checkbox-container">
+                        <label>Day:</label>
+                        <div class="custom-day">
+                            <label>
+                                <input type="checkbox" class="day" name="day" id="mon" value="Mon">
+                                <span>Mon</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" class="day" name="day" id="tue" value="Tue">
+                                <span>Tue</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" class="day" name="day" id="wed" value="Wed">
+                                <span>Wed</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" class="day" name="day" id="thu" value="Thu">
+                                <span>Thu</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" class="day" name="day" id="fri" value="Fri">
+                                <span>Fri</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" class="day" name="day" id="sat" value="Sat">
+                                <span>Sat</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" class="day" name="day" id="sun" value="Sun">
+                                <span>Sun</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-blue" id="createClassadmin">Create</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block script %}
+<script>
+    var btnAddClass = document.querySelector('#btnAddClass');
+    var classPopup = document.querySelector('#class-popup');
+    var btnCloseClass = document.querySelector('#btnCloseClass')
+
+    btnAddClass.addEventListener('click', () => {
+        classPopup.classList.add('show');
+    })
+    btnCloseClass.addEventListener('click', () => {
+        classPopup.classList.remove('show');
+    }) 
+    
+    $(document).ready(function() {
+    $('#classTable').DataTable({     
+      "aLengthMenu": [[3, 5, 10, 25, -1], [3, 5, 10, 25, "All"]],
+        "iDisplayLength": 10
+       } 
+    );
+    });
+</script>
+{% endblock %}
